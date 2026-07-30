@@ -3,177 +3,112 @@ package d040;
 import java.util.Scanner;
 import java.util.Arrays;
 
-
 public class d40 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+
+		Scanner input = new Scanner(System.in);
+
+		// Cuida da tabela do jogo da velha
 		String jv[][] = {
 				{"  ", "1 ", "2 ", "3 "},
 				{"1 ", "  ", "  ", "  "},
 				{"2 ", "  ", "  ", "  "},
 				{"3 ", "  ", "  ", "  "}
 		};
-		
+
+		// Cuida das jogadas de coluna e linha
 		int jogada[] = new int[2];
-		
-		int analise[] = new int[2];
-		
-		Scanner input = new Scanner(System.in);
-		int count = 0;
-		int jogador = 1;
-		boolean win = true;
+
+		// Variável do vencedor
 		int winner = 0;
-		
+
+		// Jogador
+		int jogador = 1;
+
+		// Define o símbolo que será jogado com base no jogador
+		String symbol;
+
+		// Variável que controla o andamento da partida
+		boolean win = true;
+
 		while (win) {
-			for (int linha = 0; linha<4; linha++){
-				for (int coluna = 0; coluna<4; coluna++) {	
+			// Exibe o jogo da velha completo atualizado
+			for (int linha = 0; linha < 4; linha++) {
+				for (int coluna = 0; coluna < 4; coluna++) { System.out.print(jv[linha][coluna]); }
+				System.out.println("");
+			}
+
+			// Define p símbolo com base no jogador atual
+			if (jogador == 1) { symbol = "X "; }
+			else { symbol = "O "; }
+
+			// Jogada atual
+			while (true) {
+				System.out.printf("Jogador %d, digite a linha (1-3): ", jogador);
+				jogada[0] = input.nextInt();
+
+				System.out.printf("Jogador %d, digite a coluna (1-3): ", jogador);
+				jogada[1] = input.nextInt();
+
+				// Se a casa estiver vazia e dentro do índice ele aceita, senão, volta o loop
+				if (jv[jogada[0]][jogada[1]].equals("  ") || jogada[0] <= 3 || jogada[1] <= 3) {
+					jv[jogada[0]][jogada[1]] = symbol;
+					break;
+				} else { System.out.println("[ERRO] Escolha uma casa vazia e um valor dentro do índice (1 - 3)!"); }
+			}
+			System.out.println("");
+
+			// Verifica se há um vencedor
+			for (int rep = 0; rep < 2; rep++) {
+
+				// Faz com que ele verifique uma vez com o jogador atual, e logo após inverta o jogador
+				if (rep == 1 && jogador == 1) { jogador = 2; }
+				else if ( rep == 1 && jogador == 2) { jogador = 1; }
+
+				if (jogador == 1) { symbol = "X "; }
+				else { symbol = "O "; }
+
+				// loop de detecção para linhas e colunas
+				for (int i = 1; i<4; i++){
+
+					// Detecta se há alguma vitória em uma das linha
+					if (jv[i][1].equals(symbol) && jv[i][2].equals(symbol) && jv[i][3].equals(symbol)){
+						winner = jogador;
+						win = false;
+					}
+
+					// Detecta se há alguma vitória em uma das colunas
+					if (jv[1][i].equals(symbol) && jv[2][i].equals(symbol) && jv[3][i].equals(symbol)){
+						winner = jogador;
+						win = false;
+					}
+				}
+
+				// Detecta se há alguma vitória nas diagonais
+				if ((jv[1][1].equals(symbol) && jv[2][2].equals(symbol) && jv[3][3].equals(symbol)) || jv[1][3].equals(symbol) && jv[2][2].equals(symbol)  && jv[3][1].equals(symbol)){
+					winner = jogador;
+					win = false;
+				}
+
+			}
+
+			// Detecta se o jogo acabou em empate
+		}
+		System.out.println("-=-=-=-=-=-=-=-= FIM =-=-=-=-=-=-=-=-=-=-");
+		if  (winner <= 2) {
+			System.out.printf("\nO vencedor é jogador o %d\n", winner);
+
+			// Exibe a tabela final do jogo
+			for (int linha = 0; linha < 4; linha++) {
+				for (int coluna = 0; coluna < 4; coluna++) {
 					System.out.print(jv[linha][coluna]);
 				}
 				System.out.println("");
 			}
-			
-			if (jogador == 1) {
-				while (true) {
-					System.out.printf("Jogador %d, digite a linha (1-3): ", jogador);
-					jogada[0] = input.nextInt();
-					
-					System.out.printf("Jogador %d, digite a coluna (1-3): ", jogador);
-					jogada[1] = input.nextInt();
-					
-					if (jv[jogada[0]][jogada[1]].equals("  ")) {
-						jv[jogada[0]][jogada[1]] = "X ";
-						jogador = 2;
-						break;
-					} else {
-						System.out.println("[ERRO] Escolha uma casa vazia!");
-					}
-				}
-			} else {
-				while (true) {
-					System.out.printf("Jogador %d, digite a linha (1-3): ", jogador);
-					jogada[0] = input.nextInt();
-					
-					System.out.printf("Jogador %d, digite a coluna (1-3): ", jogador);
-					jogada[1] = input.nextInt();
-					
-					if (jv[jogada[0]][jogada[1]].equals("  ")) {
-						jv[jogada[0]][jogada[1]] = "O ";
-						jogador = 1;
-						break;
-					} else {
-						System.out.println("[ERRO] Escolha uma casa vazia!");
-					}
-					
-				}
-			}
-			System.out.println("");
-			
-			
-			if (jogador == 1) {
-				for (int col = 1; col<3; col++) {
-					if (col == 1) {
-						for (int lin = 1; lin<3; lin++) {
-							if (jv[lin][col] == "X ") {
-								count += 1;
-							} else {
-								count = 0;
-								break;
-								
-							}
-						}
-						if (count == 3) {
-							break;
-						}
-					}
-					else if(col == 2) {
-						for (int lin = 1; lin<3; lin++) {
-							if (jv[lin][col] == "X ") {
-								count += 1;
-							} else {
-								count = 0;
-								break;
-								
-							}
-						}
-						if (count == 3) {
-							break;
-						}
-					}
-					else {
-						for (int lin = 1; lin<3; lin++) {
-							if (jv[lin][col] == "X ") {
-								count += 1;
-							} else {
-								count = 0;
-								jogador = 2;
-								break;
-								
-							}
-						}
-						if (count == 3) {
-							break;
-						}
-					}
-				}
-			
-			} else {
-				for (int col = 1; col<3; col++) {
-					if (col == 1) {
-						for (int lin = 1; lin<3; lin++) {
-							if (jv[lin][col] == "O ") {
-								count += 1;
-							} else {
-								count = 0;
-								break;
-								
-							}
-						}
-						if (count == 3) {
-							winner = 1;
-							break;
-						}
-					}
-					else if(col == 2) {
-						for (int lin = 1; lin<3; lin++) {
-							if (jv[lin][col] == "O ") {
-								count += 1;
-							} else {
-								count = 0;
-								break;
-								
-							}
-						}
-						if (count == 3) {
-							break;
-						}
-					}
-					else {
-						for (int lin = 1; lin<3; lin++) {
-							if (jv[lin][col] == "O ") {
-								count += 1;
-							} else {
-								count = 0;
-								jogador = 1;
-								break;
-								
-							}
-						}
-						if (count == 3) {
-							winner = 2;
-							break;
-						}
-					}
-				}
-			}
-		
-			if (count == 3) {
-				win = false;
-			}
-				
-			
+		} else {
+			System.out.println("\nEmpate! Deu velha\n");
 		}
-		System.out.printf("Vencedor %d", winner);
 	}
-
 }
