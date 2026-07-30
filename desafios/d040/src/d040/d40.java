@@ -33,6 +33,9 @@ public class d40 {
 		// Variável que controla o andamento da partida
 		boolean win = true;
 
+		// Conta para detectar de há vitória
+		int count = 0;
+
 		while (win) {
 			// Exibe o jogo da velha completo atualizado
 			for (int linha = 0; linha < 4; linha++) {
@@ -95,6 +98,20 @@ public class d40 {
 			}
 
 			// Detecta se o jogo acabou em empate
+			for (int linha = 0; linha < 4; linha++) {
+				for (int coluna = 0; coluna < 4; coluna++) {
+					if (jv[linha][coluna].equals("  ")) {
+						break;
+					} else {
+						count++;
+					}
+				}
+			}
+
+			if (count == 9){
+				winner = 3;
+				win = false;
+			}
 		}
 		System.out.println("-=-=-=-=-=-=-=-= FIM =-=-=-=-=-=-=-=-=-=-");
 		if  (winner <= 2) {
